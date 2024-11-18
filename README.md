@@ -1,2 +1,1 @@
-# manoa-spots
-Application Code
+# bowfolios-nextjs
