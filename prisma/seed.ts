@@ -6,120 +6,108 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log('Seeding the database');
-  config.defaultProjects.forEach(async (project) => {
-    console.log(`  Creating/Updating project ${project.name}`);
-    project.interests.forEach(async (interest) => {
-      // console.log(`Project ${project.name} ${interest}`);
-      await prisma.interest.upsert({
-        where: { name: interest },
-        update: {},
-        create: { name: interest },
-      });
-      const dbProject = await prisma.project.upsert({
-        where: { name: project.name },
-        update: {},
-        create: {
-          name: project.name,
-          description: project.description,
-          homepage: project.homepage,
-          picture: project.picture,
-        },
-      });
-      project.interests.forEach(async (intere) => {
-        const dbInterest = await prisma.interest.findUnique({
-          where: { name: intere },
-        });
-        // console.log(`${dbProject.name} ${dbInterest!.name}`);
-        const dbProjectInterest = await prisma.projectInterest.findMany({
-          where: { projectId: dbProject.id, interestId: dbInterest!.id },
-        });
-        if (dbProjectInterest.length === 0) {
-          await prisma.projectInterest.create({
-            data: {
-              projectId: dbProject.id,
-              interestId: dbInterest!.id,
+
+  // Clear existing data
+  await prisma.review.deleteMany();
+  await prisma.spot.deleteMany();
+
+  // Create spots
+  console.log('Creating spots...');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const spots = await Promise.all([
+    prisma.spot.upsert({
+      where: { name: 'Hamilton Library' },
+      update: {},
+      create: {
+        name: 'Hamilton Library',
+        description: 'Quiet study space with multiple floors',
+        imageUrl: '/images/hamilton.jpg',
+        rating: 4.5,
+        numReviews: 125,
+        address: '2550 McCarthy Mall, Honolulu, HI 96822',
+        latitude: 21.3001,
+        longitude: -157.8161,
+        hasOutlets: true,
+        hasParking: true,
+        hasFoodDrinks: false,
+        maxGroupSize: 6,
+        type: 'LIBRARY',
+      },
+    }),
+    prisma.spot.upsert({
+      where: { name: 'Sinclair Library' },
+      update: {},
+      create: {
+        name: 'Sinclair Library',
+        description: '24/7 study space with comfortable seating',
+        imageUrl: '/images/sinclair.jpg',
+        rating: 4.2,
+        numReviews: 89,
+        address: '2425 Campus Rd, Honolulu, HI 96822',
+        latitude: 21.2999,
+        longitude: -157.8190,
+        hasOutlets: true,
+        hasParking: true,
+        hasFoodDrinks: true,
+        maxGroupSize: 4,
+        type: 'LIBRARY',
+      },
+    }),
+  ]);
+
+  console.log('Spots created successfully');
+
+  // Hash password once
+  const hashedPassword = await hash('foo', 10);
+
+  // Create profiles
+  console.log('Creating profiles...');
+  await Promise.all(
+    config.defaultProfiles.map(async (profile) => {
+      try {
+        console.log(`  Creating/Updating profile ${profile.email}`);
+
+        // Create user and profile concurrently
+        await Promise.all([
+          prisma.user.upsert({
+            where: { email: profile.email },
+            update: { password: hashedPassword },
+            create: {
+              email: profile.email,
+              password: hashedPassword,
             },
-          });
-        }
-      });
-    });
-  });
-  const password = await hash('foo', 10);
-  config.defaultProfiles.forEach(async (profile) => {
-    console.log(`  Creating/Updating profile ${profile.email}`);
-    // upsert interests from the profile
-    profile.interests.forEach(async (interest) => {
-      await prisma.interest.upsert({
-        where: { name: interest },
-        update: {},
-        create: { name: interest },
-      });
-    });
-    // Upsert/Create the user so they can login.
-    await prisma.user.upsert({
-      where: { email: profile.email },
-      update: {},
-      create: {
-        email: profile.email,
-        password,
-      },
-    });
-    // Upsert/Create the profile.
-    const dbProfile = await prisma.profile.upsert({
-      where: { email: profile.email },
-      update: {},
-      create: {
-        email: profile.email,
-        firstName: profile.firstName,
-        lastName: profile.lastName,
-        bio: profile.bio,
-        picture: profile.picture,
-      },
-    });
-    profile.interests.forEach(async (interest) => {
-      const dbInterest = await prisma.interest.findUnique({
-        where: { name: interest },
-      });
-      // console.log(`${dbProfile.firstName} ${dbInterest!.name}`);
-      const dbProfileInterest = await prisma.profileInterest.findMany({
-        where: { profileId: dbProfile.id, interestId: dbInterest!.id },
-      });
-      if (dbProfileInterest.length === 0) {
-        // Create the profile interest
-        await prisma.profileInterest.create({
-          data: {
-            profileId: dbProfile.id,
-            interestId: dbInterest!.id,
-          },
-        });
+          }),
+          prisma.profile.upsert({
+            where: { email: profile.email },
+            update: {
+              firstName: profile.firstName,
+              lastName: profile.lastName,
+              bio: profile.bio || '',
+              picture: profile.picture || '',
+            },
+            create: {
+              email: profile.email,
+              firstName: profile.firstName,
+              lastName: profile.lastName,
+              bio: profile.bio || '',
+              picture: profile.picture || '',
+            },
+          }),
+        ]);
+      } catch (error) {
+        console.error(`Error creating profile for ${profile.email}:`, error);
       }
-    });
-    // Upsert/Create the profile projects
-    profile.projects.forEach(async (project) => {
-      // console.log(`Project member ${dbProfile.firstName} ${project}`);
-      const dbProject = await prisma.project.findFirst({
-        where: { name: project },
-      });
-      const dbProfileProject = await prisma.profileProject.findMany({
-        where: { profileId: dbProfile.id, projectId: dbProject!.id },
-      });
-      if (dbProfileProject.length === 0 && dbProject !== null) {
-        // Create the profile project
-        await prisma.profileProject.create({
-          data: {
-            profileId: dbProfile.id,
-            projectId: dbProject.id,
-          },
-        });
-      }
-    });
-  });
+    }),
+  );
+
+  console.log('Seeding completed');
 }
 
 main()
-  .then(() => prisma.$disconnect())
-  .catch(async (e) => {
+  .catch((e) => {
     console.error(e);
-    await prisma.$disconnect();
     process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });
