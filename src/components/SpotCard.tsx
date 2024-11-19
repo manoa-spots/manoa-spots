@@ -28,13 +28,13 @@ const SpotCard = ({ spot }: SpotCardProps) => (
       style={{ objectFit: 'cover', width: '100%' }}
     />
     <div className="card-body">
-      <div className="d-flex justify-content-between align-items-center">
+      <div className="d-flex justify-content-between align-items-center mb-2">
         <h5 className="card-title mb-0">{spot.name}</h5>
         <Badge bg="primary">{spot.type}</Badge>
       </div>
 
       {/* Rating */}
-      <div className="mb-2">
+      <div className="mb-2 text-start">
         <StarFill className="text-warning me-1" />
         <span className="fw-bold">{spot.rating.toFixed(1)}</span>
         <span className="text-muted ms-1">
@@ -47,49 +47,43 @@ const SpotCard = ({ spot }: SpotCardProps) => (
 
       {/* Description */}
       {spot.description && (
-        <p className="text-muted mb-3">
+        <p className="text-muted mb-3 text-start">
           {spot.description.length > 100
             ? `${spot.description.slice(0, 100)}...`
             : spot.description}
         </p>
       )}
 
-      {/* Amenities */}
-      <div className="row g-2 mb-3">
-        {spot.hasOutlets && (
-          <div className="col-auto">
-            <Badge bg="light" text="dark" className="d-flex align-items-center gap-1">
-              <Plug />
+      {/* Amenities - left aligned */}
+      <div className="mb-3">
+        <div className="d-flex flex-wrap gap-2">
+          {spot.hasOutlets && (
+            <Badge bg="light" text="dark" className="d-flex align-items-center">
+              <Plug className="me-1" />
               Outlets
             </Badge>
-          </div>
-        )}
-        {spot.hasParking && (
-          <div className="col-auto">
-            <Badge bg="light" text="dark" className="d-flex align-items-center gap-1">
-              <CarFront />
+          )}
+          {spot.hasParking && (
+            <Badge bg="light" text="dark" className="d-flex align-items-center">
+              <CarFront className="me-1" />
               Parking
             </Badge>
-          </div>
-        )}
-        {spot.hasFoodDrinks && (
-          <div className="col-auto">
-            <Badge bg="light" text="dark" className="d-flex align-items-center gap-1">
-              <Cup />
+          )}
+          {spot.hasFoodDrinks && (
+            <Badge bg="light" text="dark" className="d-flex align-items-center">
+              <Cup className="me-1" />
               Food/Drinks
             </Badge>
-          </div>
-        )}
-        <div className="col-auto">
-          <Badge bg="light" text="dark" className="d-flex align-items-center gap-1">
-            <People />
+          )}
+          <Badge bg="light" text="dark" className="d-flex align-items-center">
+            <People className="me-1" />
             Up to
             {spot.maxGroupSize}
           </Badge>
         </div>
       </div>
 
-      {/* Location */}
+      {/* Location - left aligned */}
       <div className="text-muted small d-flex align-items-center">
         <GeoAlt className="me-1" />
         {spot.address}
