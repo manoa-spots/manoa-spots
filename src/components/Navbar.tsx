@@ -18,11 +18,11 @@ const NavBar: React.FC = () => {
       <Container>
         <Navbar.Brand href="/" className="align-items-center">
           <span style={{ fontWeight: 800, fontSize: '24px' }}>
-            <Image 
-              src="/images/logo.png" 
-              width={50} 
-              style={{ marginBottom: 3 }} 
-              alt="spots" 
+            <Image
+              src="/images/logo.png"
+              width={50}
+              style={{ marginBottom: 3 }}
+              alt="spots"
             />
             spots
           </span>
@@ -31,9 +31,9 @@ const NavBar: React.FC = () => {
         <Navbar.Collapse id={ComponentIDs.basicNavbarNav}>
           <Nav className="me-auto justify-content-start">
             {currentUser && (
-              <Nav.Link 
-                id={ComponentIDs.homeMenuItem} 
-                active={pathname === '/home'} 
+              <Nav.Link
+                id={ComponentIDs.homeMenuItem}
+                active={pathname === '/home'}
                 href="/home"
               >
                 home
@@ -81,12 +81,12 @@ const NavBar: React.FC = () => {
           </Nav>
           <Nav className="justify-content-end">
             {currentUser ? (
-              <NavDropdown 
-                id={ComponentIDs.currentUserDropdown} 
+              <NavDropdown
+                id={ComponentIDs.currentUserDropdown}
                 title={currentUser}
               >
-                <NavDropdown.Item 
-                  id={ComponentIDs.currentUserDropdownSignOut} 
+                <NavDropdown.Item
+                  id={ComponentIDs.currentUserDropdownSignOut}
                   href="/auth/signout"
                 >
                   <BoxArrowRight />
@@ -96,16 +96,16 @@ const NavBar: React.FC = () => {
               </NavDropdown>
             ) : (
               <NavDropdown id={ComponentIDs.loginDropdown} title="Login">
-                <NavDropdown.Item 
-                  id={ComponentIDs.loginDropdownSignIn} 
+                <NavDropdown.Item
+                  id={ComponentIDs.loginDropdownSignIn}
                   href="/auth/signin"
                 >
                   <PersonFill />
                   {' '}
                   Sign in
                 </NavDropdown.Item>
-                <NavDropdown.Item 
-                  id={ComponentIDs.loginDropdownSignUp} 
+                <NavDropdown.Item
+                  id={ComponentIDs.loginDropdownSignUp}
                   href="/auth/signup"
                 >
                   <PersonPlusFill />
