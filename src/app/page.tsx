@@ -27,7 +27,7 @@ export default async function Home() {
                 style={{
                   fontSize: '36pt',
                   fontWeight: '600',
-                  color: 'var(--navbar-text-color, #432303)',
+                  color: 'var(--primary-dark)',
                 }}
               >
                 find your perfect spot!

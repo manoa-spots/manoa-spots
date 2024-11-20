@@ -13,7 +13,6 @@ const NavBar: React.FC = () => {
   const router = useRouter();
   const currentUser = session?.user?.email;
   const menuStyle = { marginBottom: '0px' };
-  const navbarClassName = currentUser ? 'bg-dark' : 'bg-light';
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (event: React.FormEvent) => {
@@ -24,7 +23,7 @@ const NavBar: React.FC = () => {
   };
 
   return (
-    <Navbar expand="lg" style={menuStyle} className={navbarClassName}>
+    <Navbar expand="lg" style={menuStyle}>
       <Container>
         <Navbar.Brand href="/" className="align-items-center">
           <span style={{ fontWeight: 800, fontSize: '24px' }}>
@@ -45,17 +44,13 @@ const NavBar: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
-                width: '300px',
+                width: '400px',
                 backgroundColor: 'rgba(255, 255, 255, 0.9)',
               }}
             />
             <Button
-              variant="outline-light"
+              className="btn-primary"
               type="submit"
-              style={{
-                borderColor: 'var(--navbar-text-color, #432303)',
-                color: 'var(--navbar-text-color, #432303)',
-              }}
             >
               <Search />
             </Button>
