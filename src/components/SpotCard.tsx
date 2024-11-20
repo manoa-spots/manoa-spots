@@ -39,8 +39,7 @@ const SpotCard = ({ spot }: SpotCardProps) => (
         <span className="fw-bold">{spot.rating.toFixed(1)}</span>
         <span className="text-muted ms-1">
           (
-          {spot.numReviews}
-          reviews
+          {`${spot.numReviews} reviews`}
           )
         </span>
       </div>

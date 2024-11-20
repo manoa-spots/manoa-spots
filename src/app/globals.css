@@ -86,6 +86,11 @@ html, body {
   background-color: white;
   color: var(--navbar-text-color);
   padding-top: 20px;
+  margin: 0px 20px 20px 20px;
+}
+
+.trending {
+  padding-top: 80px
 }
 
 .wrapper {

@@ -39,7 +39,7 @@ export default async function Home() {
               className="landing-white-background justify-content-center text-center"
               style={{ backgroundColor: 'white' }}
             >
-              <h2>trending spots</h2>
+              <h2 className="trending">trending spots</h2>
               <Container className="py-5">
                 <Row xs={1} md={2} lg={3} className="g-4">
                   {spots.map((spot) => (
