@@ -74,7 +74,7 @@ const SignIn = () => {
               <p>
                 Don&apos;t Have An Account?
                 {' '}
-                <a href="/auth/signin">Sign Up For Spots!</a>
+                <a href="/auth/signup">Sign Up For Spots!</a>
               </p>
             </div>
           </Col>
