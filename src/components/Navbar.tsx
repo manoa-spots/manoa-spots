@@ -92,6 +92,14 @@ const NavBar: React.FC = () => {
             >
               add spot
             </Nav.Link>
+            <Nav.Link
+              id={ComponentIDs.projectsMenuItem}
+              active={pathname === '/favorites'}
+              href="/favorites"
+              key="favorites"
+            >
+              favorites
+            </Nav.Link>
           </Nav>
 
           {/* Dropdowns */}
